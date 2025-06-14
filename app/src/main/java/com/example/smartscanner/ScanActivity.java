@@ -149,7 +149,6 @@ public class ScanActivity extends AppCompatActivity {
                         imageProxy.close();
                     }
                 });
-
                 cameraProvider.unbindAll();
                 Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, analysis);
                 preview.setSurfaceProvider(previewView.getSurfaceProvider());
