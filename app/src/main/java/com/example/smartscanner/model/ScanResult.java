@@ -1,9 +1,22 @@
 package com.example.smartscanner.model;
 
+import androidx.room.Entity;
+import androidx.room.TypeConverters;
+
+import com.example.smartscanner.db.ContentTypeConverter;
 import com.example.smartscanner.util.ContentType;
+import com.example.smartscanner.db.DateConverter;
+
 import java.util.Date;
 
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "scan_results")
+@TypeConverters({DateConverter.class, ContentTypeConverter.class})
 public class ScanResult {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
     private String content;          // The decoded content (e.g., URL, text)
     private ContentType type;        // Detected type (URL, CONTACT, PRODUCT, etc.)
@@ -20,7 +33,9 @@ public class ScanResult {
         this.title = title;
     }
 
-    // Getters and setters
+    // Getters
+    public int getId() { return id; }
+
     public String getContent() {
         return content;
     }
@@ -40,6 +55,10 @@ public class ScanResult {
     public String getTitle() {
         return title;
     }
+
+    // Setters
+    public void setId(int id) { this.id = id; }
+
 
     public void setContent(String content) {
         this.content = content;

@@ -1,9 +1,14 @@
 package com.example.smartscanner;
+
+import com.example.smartscanner.db.AppDatabase;
+import com.example.smartscanner.db.ScanResultDAO;
 import com.example.smartscanner.model.ScanResult;
 
 import java.util.ArrayList;
 import java.util.Date;
+
 import android.util.Log;
+
 import com.example.smartscanner.util.ContentUtil;
 import com.example.smartscanner.util.ContentType;
 
@@ -29,7 +34,9 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.smartscanner.viewmodel.ScanHistoryViewModel;
 import com.google.common.util.concurrent.ListenableFuture;
 //import com.google.mlkit.vision.barcode.Barcode;
 import com.google.mlkit.vision.barcode.common.Barcode;
@@ -39,6 +46,7 @@ import com.google.mlkit.vision.common.InputImage;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -48,6 +56,12 @@ public class ScanActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ExecutorService cameraExecutor;
     private BarcodeScanner scanner;
+
+    private ScanResultDAO scanResultDao;
+    private ScanHistoryViewModel scanHistoryViewModel;
+    private Executor databaseWriteExecutor;
+
+    private static final String TAG = ScanActivity.class.getSimpleName();
 
     private static final int CAMERA_PERMISSION_REQUEST = 200;
 
@@ -62,7 +76,16 @@ public class ScanActivity extends AppCompatActivity {
         previewView = findViewById(R.id.previewView);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        EditText editTextTitle = findViewById(R.id.editTextTitle);
+        editTextTitle = findViewById(R.id.editTextTitle);
+
+        AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+        scanResultDao = db.scanResultDao();
+
+        // Initialize the ScanHistoryViewModel
+        scanHistoryViewModel = new ViewModelProvider(this).get(ScanHistoryViewModel.class);
+
+        // Create an executor for database writes (or use cameraExecutor if appropriate)
+        databaseWriteExecutor = Executors.newSingleThreadExecutor(); // Or use a shared one
 
         scanner = BarcodeScanning.getClient();
         cameraExecutor = Executors.newSingleThreadExecutor();
@@ -76,7 +99,8 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
-    @OptIn(markerClass = ExperimentalGetImage.class) private void startCamera() {
+    @OptIn(markerClass = ExperimentalGetImage.class)
+    private void startCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
                 ProcessCameraProvider.getInstance(this);
 
@@ -110,30 +134,41 @@ public class ScanActivity extends AppCompatActivity {
                                         scanned = true;
                                         runOnUiThread(() -> progressBar.setVisibility(View.GONE));
 
-                                        for (Barcode barcode : barcodes) {
-                                            String rawValue = barcode.getRawValue();
 
+                                        for (Barcode barcode : barcodes) {
+                                            Log.d("ScanActivity", "Barcode detected - display value: " + barcode.getDisplayValue());
+                                            String rawValue = barcode.getRawValue();
                                             ContentType type = ContentUtil.detectContentType(rawValue);
+                                            Log.d("ScanActivity", "Raw value and type gotten: " + rawValue + " (" + type + ")");
+
+                                            String userTitle = ""; // Initialize
                                             ScanResult result = new ScanResult(
                                                     rawValue,
                                                     type,
                                                     new Date(),
-                                                    null,
-                                                    ""
+                                                    null, // imagePath, set if you have it
+                                                    userTitle.isEmpty() ? "Scan - " + rawValue.substring(0, Math.min(rawValue.length(), 10)) : userTitle // Default title
                                             );
+
                                             if (isValidResult(result)) {
-                                                String userTitle = editTextTitle.getText().toString();
+                                                String newTitle = editTextTitle.getText().toString();
+                                                if (newTitle.length() > 0) {
+                                                    userTitle = editTextTitle.getText().toString();
+                                                }
                                                 result.setTitle(userTitle);
-                                                scanResults.add(result);
+
+                                                // Use the scanHistoryViewModel to insert the result into the RoomDB
+                                                scanHistoryViewModel.insert(result);
+                                                runOnUiThread(() ->
+                                                        Toast.makeText(this, "Scanned & Saved: " + result.getTitle(), Toast.LENGTH_SHORT).show());
                                                 Log.d("ScanActivity", "Valid result added: " + rawValue + " (" + type + ")");
                                             } else {
                                                 Log.d("ScanActivity", "Invalid result ignored: " + rawValue + " (" + type + ")");
+                                                runOnUiThread(() ->
+                                                        Toast.makeText(this, "Ignored: " + rawValue, Toast.LENGTH_SHORT).show());
                                             }
 
 
-
-                                            runOnUiThread(() ->
-                                                    Toast.makeText(this, "Scanned: " + rawValue, Toast.LENGTH_SHORT).show());
                                         }
                                     }
 
@@ -177,7 +212,12 @@ public class ScanActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         cameraExecutor.shutdown();
-        scanner.close();
+        if (databaseWriteExecutor instanceof ExecutorService) { // Shutdown if it's an ExecutorService
+            ((ExecutorService) databaseWriteExecutor).shutdown();
+        }
+        if (scanner != null) {
+            scanner.close();
+        }
     }
 
     @Override
