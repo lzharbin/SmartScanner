@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SmartScanner</string>
+    <string name="open_scanner">Ouvrir le scanner QR</string>
+
+    <string name="menu_help">Aide</string>
+
+    <string name="show_notifications">Démo Notifications</string>
+    <string name="snackbar_msg">Voici un Snackbar !</string>
+    <string name="dialog_title">Dialogue Personnalisé</string>
+    <string name="dialog_message">Ceci est une démo de dialogue personnalisé.</string>
+    <string name="dialog_ok">Compris</string>
+    <string name="menu_history">Historique</string>
+    <string name="dialog_confirm_title">Confirmer la suppression</string>
+    <string name="dialog_confirm_message">Voulez-vous vraiment supprimer ce scan ?</string>
+    <string name="delete">Supprimer</string>
+    <string name="cancel">Annuler</string>
+    <string name="toast_deleted">Scan supprimé</string>
+    <string name="snackbar_deleted">Scan supprimé</string>
+    <string name="undo">Annuler</string>
+
+
+    <string name="help_title">Aide &amp; À propos</string>
+    <string name="help_authors">
+        • Jay Nareshkumar Prajapati (245839680)\n
+        • Oghenefego Etese (245809480)\n
+        • Yue Cai (169076223)\n
+        • Lu Zhang (245811260)\n
+        • Nilufar Hossain (245844000)
+    </string>
+    <string name="welcome_text">Bienvenue sur SmartScanner !</string>
+    <string name="help_version">Version : %1$s</string>
+    <string name="help_instructions">
+• Appuyez sur « Ouvrir le lecteur QR » pour scanner un code-barres.\n
+• Accédez à l’historique pour voir vos scans.\n
+• Glissez pour supprimer (annulez via Snackbar).\n
+• Appuyez longuement pour modifier le titre d’un scan.
+</string>
+
+
+    <string name="scanned_saved">Scanné et enregistré : %1$s</string>
+    <string name="ignored">Ignoré : %1$s</string>
+    <string name="scan_failed">Échec du scan</string>
+    <string name="camera_permission_denied">Permission caméra refusée</string>
+
+    <!-- Pas d’historique de scan disponible. -->
+    <string name="no_history">Aucun historique de scan disponible.</string>
+
+    <!-- Cliqué : <contenu> -->
+    <string name="clicked_prefix">Cliqué : %1$s</string>
+    <string name="enter_title_tag">Entrez titre/étiquette</string>
+    <string name="placeholder_content">Contenu du scan</string>
+    <string name="placeholder_type">Type : %1$s</string>
+    <string name="placeholder_timestamp">Horodatage : %1$s</string>
+
+
+
+</resources>

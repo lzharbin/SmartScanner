@@ -160,12 +160,12 @@ public class ScanActivity extends AppCompatActivity {
                                                 // Use the scanHistoryViewModel to insert the result into the RoomDB
                                                 scanHistoryViewModel.insert(result);
                                                 runOnUiThread(() ->
-                                                        Toast.makeText(this, "Scanned & Saved: " + result.getTitle(), Toast.LENGTH_SHORT).show());
+                                                        Toast.makeText(this, R.string.scanned_saved  + result.getTitle(), Toast.LENGTH_SHORT).show());
                                                 Log.d("ScanActivity", "Valid result added: " + rawValue + " (" + type + ")");
                                             } else {
                                                 Log.d("ScanActivity", "Invalid result ignored: " + rawValue + " (" + type + ")");
                                                 runOnUiThread(() ->
-                                                        Toast.makeText(this, "Ignored: " + rawValue, Toast.LENGTH_SHORT).show());
+                                                        Toast.makeText(this, R.string.ignored + rawValue, Toast.LENGTH_SHORT).show());
                                             }
 
 
@@ -176,7 +176,7 @@ public class ScanActivity extends AppCompatActivity {
                                 .addOnFailureListener(e -> {
                                     runOnUiThread(() -> {
                                         progressBar.setVisibility(View.GONE);
-                                        Toast.makeText(this, "Scan failed", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(this, R.string.scan_failed, Toast.LENGTH_SHORT).show();
                                     });
                                 })
                                 .addOnCompleteListener(task -> imageProxy.close());
@@ -230,7 +230,7 @@ public class ScanActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startCamera();
             } else {
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.camera_permission_denied, Toast.LENGTH_LONG).show();
             }
         }
     }

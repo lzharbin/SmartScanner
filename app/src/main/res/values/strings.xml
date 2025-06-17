@@ -1,3 +1,59 @@
 <resources>
     <string name="app_name">SmartScanner</string>
+    <string name="open_scanner">Open QR Scanner</string>
+    <string name="menu_help">Help</string>
+
+    <string name="show_notifications">Demo Notifications</string>
+    <string name="snackbar_msg">Here’s a Snackbar!</string>
+    <string name="dialog_title">Custom Dialog</string>
+    <string name="dialog_message">This is a custom dialog demo.</string>
+    <string name="dialog_ok">Got it</string>
+    <string name="menu_history">History</string>
+    <string name="dialog_confirm_title">Confirm Deletion</string>
+    <string name="dialog_confirm_message">Are you sure you want to delete this scan?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="toast_deleted">Scan deleted</string>
+    <string name="snackbar_deleted">Scan deleted</string>
+    <string name="undo">Undo</string>
+
+
+
+    <string name="welcome_text">Welcome to SmartScanner!</string>
+    <string name="help_title">Help &amp; About</string>
+    <string name="help_authors">
+  • Jay Nareshkumar Prajapati (245839680)\n
+  • Oghenefego Etese (245809480)\n
+  • Yue Cai (169076223)\n
+  • Lu Zhang (245811260)\n
+  • Nilufar Hossain (245844000)
+</string>
+    <string name="help_version">Version: %1$s</string>
+    <string name="help_instructions">
+  • Tap “Scan” to scan a QR/barcode.\n
+  • Tap “History” to view past scans.\n
+  • Swipe to delete (undo via Snackbar).\n
+  • Long-press an entry to edit its title.
+</string>
+
+    <string name="scanned_saved">Scanned &amp; Saved: %1$s</string>
+
+    <string name="ignored">Ignored: %1$s</string>
+
+    <string name="scan_failed">Scan failed</string>
+
+    <string name="camera_permission_denied">Camera permission denied</string>
+
+    <string name="no_history">No scan history available.</string>
+
+
+
+    <string name="enter_title_tag">Enter title/tag</string>
+
+
+    <string name="placeholder_content">Scan Content</string>
+    <string name="placeholder_type">Type: %1$s</string>
+    <string name="placeholder_timestamp">Timestamp: %1$s</string>
+    <string name="clicked_prefix">Clicked: %1$s</string>
+
 </resources>

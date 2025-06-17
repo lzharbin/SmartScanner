@@ -16,23 +16,31 @@ import java.util.List;
 public interface ScanResultDAO {
 
     @Query("SELECT * FROM scan_results ORDER BY timestamp DESC")
-    LiveData<List<ScanResult>> getAllScans(); // Observe changes with LiveData
+    LiveData<List<ScanResult>> getAllScans();
 
     @Query("SELECT * FROM scan_results WHERE id = :id")
     LiveData<ScanResult> getScanById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(ScanResult scanResult); // For inserting a single scan
+    void insert(ScanResult scanResult);
 
     @Update
-    void update(ScanResult scanResult); // For updating a single scan
+    void update(ScanResult scanResult);
 
     @Delete
-    void delete(ScanResult scanResult); // For deleting a single scan
+    void delete(ScanResult scanResult);
 
     @Query("DELETE FROM scan_results WHERE id = :scanId")
-    void deleteById(int scanId); // Method to delete by ID
+    void deleteById(int scanId);
 
     @Query("DELETE FROM scan_results")
     void deleteAllScans();
+
+    // 🔍 New: Filter scans by title, tag, or content (for search functionality)
+    //@Query("SELECT * FROM scan_results WHERE title LIKE '%' || :query || '%' OR tag LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%' ORDER BY timestamp DESC")
+    //LiveData<List<ScanResult>> searchScans(String query);
+
+    @Query("SELECT * FROM scan_results WHERE title LIKE '%' || :query || '%'")
+    LiveData<List<ScanResult>> searchScans(String query);
+
 }

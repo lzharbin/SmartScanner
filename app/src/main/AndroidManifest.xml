@@ -20,6 +20,12 @@
         <!-- ✅ ScanActivity: QR/barcode scanning screen -->
         <activity android:name=".ScanActivity" />
 
+
+        <!-- ✅ ScanHistoryActivity: History screen -->
+        <activity android:name=".view.ScanHistoryActivity"
+            android:label="@string/menu_history"/>
+
+
         <!-- ✅ MainActivity: App entry point -->
         <activity
             android:name=".MainActivity"
